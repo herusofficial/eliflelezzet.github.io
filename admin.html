@@ -12,9 +12,11 @@
         h1, h2, h3 { font-family: 'Playfair Display', serif; }
         .glass-overlay { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); }
         .hidden { display: none !important; }
-        /* Yükleniyor animasyonu */
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid #c2410c; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* Animasyonlar */
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .modal-animate { animation: fadeIn 0.2s ease-out forwards; }
     </style>
 </head>
 <body class="text-slate-800 relative">
@@ -24,51 +26,33 @@
     <div id="login-view" class="min-h-screen flex items-center justify-center bg-slate-900">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md mx-4 border-t-4 border-orange-600">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-600">
-                    <i class="fa-solid fa-user-shield text-3xl"></i>
-                </div>
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-600"><i class="fa-solid fa-user-shield text-3xl"></i></div>
                 <h2 class="text-3xl font-bold text-slate-800">Yönetici Girişi</h2>
-                <p class="text-slate-500 text-sm mt-2">Lütfen yetkili hesabınızla giriş yapın.</p>
             </div>
-            
             <form id="login-form" class="space-y-5">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">E-posta Adresi</label>
-                    <input type="email" id="login-email" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Şifre</label>
-                    <input type="password" id="login-password" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition" required>
-                </div>
+                <input type="email" id="login-email" class="w-full p-3 border border-slate-300 rounded-lg outline-none focus:border-orange-500" placeholder="E-posta" required>
+                <input type="password" id="login-password" class="w-full p-3 border border-slate-300 rounded-lg outline-none focus:border-orange-500" placeholder="Şifre" required>
                 <div id="login-error" class="text-red-500 text-sm text-center hidden"></div>
-                <button type="submit" id="login-btn" class="w-full bg-orange-600 text-white py-3.5 rounded-lg font-bold hover:bg-orange-700 transition shadow-lg flex justify-center items-center gap-2">
-                    Giriş Yap
-                </button>
+                <button type="submit" id="login-btn" class="w-full bg-orange-600 text-white py-3.5 rounded-lg font-bold hover:bg-orange-700 transition shadow-lg">Giriş Yap</button>
             </form>
-            <div class="mt-6 text-center">
-                <a href="index.html" class="text-sm text-slate-400 hover:text-orange-500 transition">← Siteye Dön</a>
-            </div>
         </div>
     </div>
 
     <div id="admin-view" class="min-h-screen flex flex-col hidden">
-        
         <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <div class="flex items-center gap-3">
                     <div class="bg-orange-600 text-white w-10 h-10 rounded-lg flex items-center justify-center shadow-md"><i class="fa-solid fa-layer-group"></i></div>
-                    <div><h1 class="text-xl font-bold text-slate-800 leading-tight">Yönetim Paneli</h1><span class="text-xs text-green-600 font-medium">● Çevrimiçi</span></div>
+                    <div><h1 class="text-xl font-bold text-slate-800">Yönetim Paneli</h1></div>
                 </div>
                 <div class="flex gap-3 items-center">
-                    <a href="#reviews-section" class="hidden md:flex items-center gap-2 bg-white border border-slate-300 text-slate-600 px-4 py-2 rounded-lg font-medium hover:bg-slate-50 transition">
+                    <button onclick="toggleCalculator()" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition flex items-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-calculator"></i> Maliyet Hesapla
+                    </button>
+                    <a href="#reviews-section" class="flex items-center gap-2 bg-white border border-slate-300 text-slate-600 px-4 py-2 rounded-lg font-medium hover:bg-slate-50 transition">
                         <i class="fa-solid fa-comments"></i> <span id="review-badge" class="bg-red-500 text-white text-[10px] px-1.5 rounded-full hidden">0</span>
                     </a>
-                    <button onclick="toggleCalculator()" class="hidden md:flex bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition items-center gap-2 shadow-sm">
-                        <i class="fa-solid fa-calculator"></i> Maliyet
-                    </button>
-                    <button onclick="logout()" class="bg-slate-800 text-white px-4 py-2 rounded-lg font-medium hover:bg-slate-900 transition flex items-center gap-2">
-                        <i class="fa-solid fa-right-from-bracket"></i> Çıkış
-                    </button>
+                    <button onclick="logout()" class="bg-slate-800 text-white px-4 py-2 rounded-lg font-medium hover:bg-slate-900 transition"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</button>
                 </div>
             </div>
         </header>
@@ -78,41 +62,58 @@
                 <div class="lg:col-span-1 space-y-6">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                         <h2 class="text-lg font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-palette text-blue-500"></i> Tema Rengi</h2>
-                        <div class="flex gap-2"><input type="text" id="accent-color" placeholder="#f97316" class="flex-1 border p-2 rounded-lg text-sm uppercase outline-none focus:border-blue-500"><div id="color-preview" class="w-10 h-10 rounded-lg border shadow-sm"></div></div>
-                        <button onclick="saveSettings()" class="w-full mt-3 bg-blue-50 text-blue-600 font-semibold py-2 rounded-lg hover:bg-blue-100 transition text-sm">Kaydet</button>
+                        <div class="flex gap-2"><input type="text" id="accent-color" placeholder="#f97316" class="flex-1 border p-2 rounded-lg text-sm uppercase outline-none"><div id="color-preview" class="w-10 h-10 rounded-lg border shadow-sm"></div></div>
+                        <button onclick="saveSettings()" class="w-full mt-3 bg-blue-50 text-blue-600 font-semibold py-2 rounded-lg text-sm hover:bg-blue-100">Kaydet</button>
                     </div>
-
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden transition-all" id="form-container">
                         <div class="absolute top-0 left-0 w-1 h-full bg-green-500" id="form-indicator"></div>
                         <div class="flex justify-between items-center mb-6 pl-3"><h2 class="text-lg font-bold text-slate-800" id="form-title">Yeni Ürün</h2><button onclick="resetForm()" id="cancel-edit-btn" class="hidden text-xs text-red-500 hover:underline">İptal</button></div>
                         <form id="product-form" class="space-y-4">
                             <input type="hidden" id="edit-id">
-                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Ürün Adı</label><input type="text" id="p-name" class="w-full border border-slate-300 p-2.5 rounded-lg focus:ring-2 focus:ring-green-200 outline-none transition" required></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Ürün Adı</label><input type="text" id="p-name" class="w-full border p-2.5 rounded-lg outline-none focus:border-green-500" required></div>
                             <div class="grid grid-cols-2 gap-4">
-                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Fiyat (TL)</label><input type="number" id="p-price" class="w-full border border-slate-300 p-2.5 rounded-lg focus:ring-2 focus:ring-green-200 outline-none" required></div>
-                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Birim</label><select id="p-portion" class="w-full border border-slate-300 p-2.5 rounded-lg bg-white outline-none"><option>Adet</option><option>Kg</option><option>Porsiyon</option><option>Tepsi</option><option>Dilim</option><option>Paket</option><option>Litre</option><option>Kase</option></select></div>
+                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Fiyat (TL)</label><input type="number" id="p-price" class="w-full border p-2.5 rounded-lg outline-none focus:border-green-500" required></div>
+                                <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Birim</label><select id="p-portion" class="w-full border p-2.5 rounded-lg bg-white outline-none"><option>Adet</option><option>Kg</option><option>Porsiyon</option><option>Tepsi</option><option>Dilim</option><option>Paket</option><option>Litre</option><option>Kase</option></select></div>
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kategori</label>
-                                <select id="p-category" class="w-full border border-slate-300 p-2.5 rounded-lg bg-white outline-none">
-                                    <option value="yemek">Ana Yemekler</option><option value="tatli">Tatlılar</option><option value="tuzlu">Tuzlular</option><option value="kahvalti">Kahvaltılık & Sos</option><option value="meze">Mezeler & Salatalar</option><option value="icecek">İçecekler</option><option value="diyet">Diyet / Fit</option><option value="ozel">Özel Sipariş</option>
+                                <select id="p-category" class="w-full border p-2.5 rounded-lg bg-white outline-none">
+                                    <option value="yemek">Ana Yemekler</option>
+                                    <option value="tatli">Tatlılar</option>
+                                    <option value="tuzlu">Tuzlular</option>
+                                    <option value="kahvalti">Kahvaltılık & Sos</option>
+                                    <option value="meze">Mezeler & Salatalar</option>
+                                    <option value="icecek">İçecekler</option>
+                                    <option value="diyet">Diyet / Fit</option>
+                                    <option value="ozel">Özel Sipariş</option>
                                 </select>
                             </div>
-                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Görsel URL</label><input type="text" id="p-img" class="w-full border border-slate-300 p-2.5 rounded-lg focus:ring-2 focus:ring-green-200 outline-none" required></div>
-                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Açıklama</label><textarea id="p-desc" rows="3" class="w-full border border-slate-300 p-2.5 rounded-lg focus:ring-2 focus:ring-green-200 outline-none"></textarea></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Görsel URL</label><input type="text" id="p-img" class="w-full border p-2.5 rounded-lg outline-none focus:border-green-500" required></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Açıklama</label><textarea id="p-desc" rows="3" class="w-full border p-2.5 rounded-lg outline-none focus:border-green-500"></textarea></div>
                             <button type="submit" id="submit-btn" class="w-full bg-slate-900 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition shadow-md flex justify-center items-center gap-2"><i class="fa-solid fa-plus"></i> Kaydet</button>
                         </form>
                     </div>
                 </div>
-
                 <div class="lg:col-span-2 space-y-6">
                     <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-4 justify-between items-center">
-                        <div class="relative w-full sm:w-1/2"><i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400"></i><input type="text" id="search-input" onkeyup="filterTable()" placeholder="Ürün ara..." class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg outline-none focus:border-orange-500 transition"></div>
-                        <div class="w-full sm:w-1/3"><select id="filter-category" onchange="filterTable()" class="w-full p-2.5 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-orange-500"><option value="all">Tüm Kategoriler</option><option value="yemek">Ana Yemekler</option><option value="tatli">Tatlılar</option><option value="tuzlu">Tuzlular</option><option value="kahvalti">Kahvaltılık & Sos</option><option value="meze">Mezeler</option><option value="icecek">İçecekler</option><option value="diyet">Diyet</option><option value="ozel">Özel</option></select></div>
+                        <div class="relative w-full sm:w-1/2"><i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400"></i><input type="text" id="search-input" onkeyup="filterTable()" placeholder="Ürün ara..." class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg outline-none focus:border-orange-500"></div>
+                        <div class="w-full sm:w-1/3">
+                            <select id="filter-category" onchange="filterTable()" class="w-full p-2.5 border border-slate-300 rounded-lg bg-slate-50 outline-none focus:border-orange-500">
+                                <option value="all">Tüm Kategoriler</option>
+                                <option value="yemek">Ana Yemekler</option>
+                                <option value="tatli">Tatlılar</option>
+                                <option value="tuzlu">Tuzlular</option>
+                                <option value="kahvalti">Kahvaltılık & Sos</option>
+                                <option value="meze">Mezeler</option>
+                                <option value="icecek">İçecekler</option>
+                                <option value="diyet">Diyet / Fit</option>
+                                <option value="ozel">Özel</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                         <div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead class="bg-slate-50 border-b border-slate-200"><tr class="text-xs font-bold text-slate-500 uppercase"><th class="p-4">Ürün</th><th class="p-4">Kategori</th><th class="p-4">Fiyat</th><th class="p-4 text-right">İşlem</th></tr></thead><tbody id="admin-product-list" class="divide-y divide-slate-100 text-sm"></tbody></table></div>
-                        <div id="empty-msg" class="hidden p-8 text-center text-slate-500"><p>Kriterlere uygun ürün bulunamadı.</p></div>
+                        <div id="empty-msg" class="hidden p-8 text-center text-slate-500">Ürün bulunamadı.</div>
                     </div>
                 </div>
             </div>
@@ -122,22 +123,65 @@
                     <h2 class="text-2xl font-bold text-slate-800"><i class="fa-solid fa-comments text-orange-500 mr-2"></i> Müşteri Yorumları</h2>
                     <span class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full" id="total-reviews-count">0 Yorum</span>
                 </div>
-                <div id="admin-reviews-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="col-span-full text-center py-10 text-slate-400">Yorumlar yükleniyor...</div>
-                </div>
+                <div id="admin-reviews-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
         </main>
     </div>
 
     <div id="calculator-modal" class="fixed inset-0 glass-overlay z-50 hidden flex items-center justify-center p-4 transition-opacity duration-300">
-        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] animate-[fadeIn_0.3s_ease-out]">
-            <div class="p-6 border-b flex justify-between items-center bg-slate-50 rounded-t-2xl"><h3 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-calculator text-green-600 mr-2"></i> Maliyet Hesaplayıcı</h3><button onclick="toggleCalculator()" class="text-slate-400 hover:text-red-500 transition"><i class="fa-solid fa-xmark text-2xl"></i></button></div>
-            <div class="p-8 overflow-y-auto flex-1 space-y-6">
-                <div><label class="block text-sm font-bold text-slate-700 mb-1">Hesaplanacak Ürün</label><select id="calc-product-select" class="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-green-200 outline-none bg-white"><option value="">Lütfen listeden bir ürün seçiniz...</option></select></div>
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200"><div class="flex justify-between items-center mb-2"><label class="block text-sm font-bold text-slate-700">Kullanılan Malzemeler</label><button onclick="addIngredientRow()" class="text-xs bg-white border border-slate-300 px-3 py-1.5 rounded hover:bg-slate-100 transition font-medium">+ Malzeme Ekle</button></div><div id="ingredients-list" class="space-y-2"></div></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-green-50 p-6 rounded-xl border border-green-100"><div><label class="block text-xs font-bold text-green-800 uppercase mb-1">Toplam Maliyet</label><div class="text-2xl font-bold text-slate-800" id="total-cost">0.00 ₺</div></div><div><label class="block text-xs font-bold text-green-800 uppercase mb-1">Kar Marjı (%)</label><input type="number" id="profit-margin" value="50" oninput="calculateTotals()" class="w-full border p-2 rounded bg-white text-lg font-bold outline-none text-center focus:ring-2 focus:ring-green-200"></div><div><label class="block text-xs font-bold text-green-800 uppercase mb-1">Önerilen Satış Fiyatı</label><div class="text-2xl font-bold text-green-600" id="suggested-price">0.00 ₺</div></div></div>
+        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] modal-animate">
+            
+            <div class="p-6 border-b flex justify-between items-center bg-slate-50 rounded-t-2xl">
+                <h3 class="text-xl font-bold text-slate-800">
+                    <i class="fa-solid fa-calculator text-green-600 mr-2"></i> Maliyet ve Kar Hesaplayıcı
+                </h3>
+                <button onclick="toggleCalculator()" class="text-slate-400 hover:text-red-500 transition">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
             </div>
-            <div class="p-6 border-t bg-slate-50 rounded-b-2xl flex justify-end gap-3"><button onclick="toggleCalculator()" class="px-6 py-3 rounded-lg text-slate-600 font-bold hover:bg-slate-200 transition">Kapat</button><button onclick="saveCalculation()" class="px-6 py-3 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition shadow-lg flex items-center gap-2"><i class="fa-solid fa-save"></i> Hesabı Kaydet</button></div>
+            
+            <div class="p-8 overflow-y-auto flex-1 space-y-6">
+                
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Hesaplanacak Ürün</label>
+                    <select id="calc-product-select" class="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-green-200 outline-none bg-white">
+                        <option value="">Lütfen listeden bir ürün seçiniz...</option>
+                    </select>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-bold text-slate-700">Kullanılan Malzemeler</label>
+                        <button onclick="addIngredientRow()" class="text-xs bg-white border border-slate-300 px-3 py-1.5 rounded hover:bg-slate-100 transition font-medium">
+                            + Malzeme Ekle
+                        </button>
+                    </div>
+                    <div id="ingredients-list" class="space-y-2">
+                        </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-green-50 p-6 rounded-xl border border-green-100">
+                    <div>
+                        <label class="block text-xs font-bold text-green-800 uppercase mb-1">Toplam Maliyet</label>
+                        <div class="text-2xl font-bold text-slate-800" id="total-cost">0.00 ₺</div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-green-800 uppercase mb-1">Kar Marjı (%)</label>
+                        <input type="number" id="profit-margin" value="50" oninput="calculateTotals()" class="w-full border p-2 rounded bg-white text-lg font-bold outline-none text-center focus:ring-2 focus:ring-green-200">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-green-800 uppercase mb-1">Önerilen Satış Fiyatı</label>
+                        <div class="text-2xl font-bold text-green-600" id="suggested-price">0.00 ₺</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 border-t bg-slate-50 rounded-b-2xl flex justify-end gap-3">
+                <button onclick="toggleCalculator()" class="px-6 py-3 rounded-lg text-slate-600 font-bold hover:bg-slate-200 transition">Kapat</button>
+                <button onclick="saveCalculation()" class="px-6 py-3 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-save"></i> Hesabı Kaydet
+                </button>
+            </div>
         </div>
     </div>
 
@@ -146,6 +190,7 @@
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, updateDoc, doc, setDoc, getDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+        // FIREBASE AYARLARI
         const firebaseConfig = {
             apiKey: "AIzaSyCE749Ey9zhATV5LBEbZzkgTN76oTKZ46A",
             authDomain: "elifle-lezzet.firebaseapp.com",
@@ -166,20 +211,18 @@
         window.allProductsData = [];
         let firstLoad = true;
 
-        // --- AUTHENTICATION ---
+        // --- AUTH (GİRİŞ/ÇIKIŞ) ---
         onAuthStateChanged(auth, (user) => {
             const loginView = document.getElementById('login-view');
             const adminView = document.getElementById('admin-view');
             
             if (user) {
-                // Giriş Yapılmışsa
                 loginView.classList.add('hidden');
                 adminView.classList.remove('hidden');
                 fetchProducts();
                 loadSettings();
                 listenForReviews();
             } else {
-                // Çıkış Yapılmışsa
                 loginView.classList.remove('hidden');
                 adminView.classList.add('hidden');
             }
@@ -192,13 +235,11 @@
             const btn = document.getElementById('login-btn');
             const err = document.getElementById('login-error');
 
-            btn.innerHTML = '<div class="loader"></div>'; // Yükleniyor animasyonu
+            btn.innerHTML = '<div class="loader"></div>';
             err.classList.add('hidden');
 
             signInWithEmailAndPassword(auth, email, pass)
-                .then(() => {
-                    // Başarılı giriş, onAuthStateChanged yakalayacak
-                })
+                .then(() => {})
                 .catch((error) => {
                     btn.innerHTML = 'Giriş Yap';
                     err.innerText = "Hatalı e-posta veya şifre.";
@@ -207,12 +248,10 @@
         });
 
         window.logout = () => {
-            signOut(auth).then(() => {
-                alert("Çıkış yapıldı.");
-            });
+            signOut(auth).then(() => alert("Çıkış yapıldı."));
         };
 
-        // --- ÜRÜN YÖNETİMİ ---
+        // --- ÜRÜN İŞLEMLERİ (CRUD) ---
         async function fetchProducts() {
             const listBody = document.getElementById('admin-product-list');
             const emptyMsg = document.getElementById('empty-msg');
@@ -280,12 +319,17 @@
                 else await addDoc(productsRef, d);
                 resetForm();
                 fetchProducts();
-                alert(id ? "Ürün Güncellendi!" : "Ürün Eklendi!");
+                showNotification("Başarılı", id ? "Ürün güncellendi." : "Ürün eklendi.");
             } catch(e){ alert(e.message); } 
             finally { btn.innerHTML=original; btn.disabled=false; }
         });
 
-        window.deleteProduct = async (id) => { if(confirm("Silmek istediğinize emin misiniz?")) { await deleteDoc(doc(db,"products",id)); fetchProducts(); }};
+        window.deleteProduct = async (id) => { 
+            if(confirm("Silmek istediğinize emin misiniz?")) { 
+                await deleteDoc(doc(db,"products",id)); 
+                fetchProducts(); 
+            }
+        };
         
         window.startEdit = (id) => {
             const p = window.allProductsData.find(x=>x.id===id);
@@ -309,7 +353,7 @@
         window.resetForm = () => {
             document.getElementById('product-form').reset();
             document.getElementById('edit-id').value="";
-            document.getElementById('form-title').innerText="Yeni Ürün Ekle";
+            document.getElementById('form-title').innerText="Yeni Ürün";
             document.getElementById('form-indicator').classList.replace('bg-blue-500', 'bg-green-500');
             document.getElementById('cancel-edit-btn').classList.add('hidden');
             const btn = document.getElementById('submit-btn');
@@ -370,30 +414,83 @@
             try { await updateDoc(doc(db, "reviews", reviewId), { reply: replyText }); showNotification("Başarılı", "Yanıt kaydedildi."); } catch (e) { alert("Hata"); }
         };
         window.deleteReview = async (id) => { if(confirm("Silinsin mi?")) { await deleteDoc(doc(db, "reviews", id)); showNotification("Bilgi", "Silindi."); } };
-        function showNotification(title, msg) { const area = document.getElementById('notification-area'); const toast = document.createElement('div'); toast.className = "notification-toast pointer-events-auto bg-white border-l-4 border-green-500 p-4 rounded shadow-xl flex items-start gap-3 w-80"; toast.innerHTML = `<div><h4 class="font-bold text-sm">${title}</h4><p class="text-xs text-slate-600">${msg}</p></div>`; area.appendChild(toast); setTimeout(() => { toast.remove(); }, 5000); }
+        
+        function showNotification(title, msg) { 
+            const area = document.getElementById('notification-area'); 
+            const toast = document.createElement('div'); 
+            toast.className = "notification-toast pointer-events-auto bg-white border-l-4 border-green-500 p-4 rounded shadow-xl flex items-start gap-3 w-80"; 
+            toast.innerHTML = `<div><h4 class="font-bold text-sm">${title}</h4><p class="text-xs text-slate-600">${msg}</p></div>`; 
+            area.appendChild(toast); 
+            setTimeout(() => { toast.remove(); }, 5000); 
+        }
 
-        // --- HESAPLAYICI & AYARLAR ---
+        // --- MALİYET HESAPLAYICI ---
         window.toggleCalculator = () => { 
-            const modal = document.getElementById('calculator-modal'); modal.classList.toggle('hidden');
+            const modal = document.getElementById('calculator-modal'); 
+            modal.classList.toggle('hidden');
             if(!modal.classList.contains('hidden')) {
                 const select = document.getElementById('calc-product-select');
                 select.innerHTML = '<option value="">Lütfen listeden bir ürün seçiniz...</option>';
-                window.allProductsData.forEach(p => { select.innerHTML += `<option value="${p.name}">${p.name} (${p.price} ₺)</option>`; });
-                const list = document.getElementById('ingredients-list'); if(list.children.length === 0) addIngredientRow();
+                window.allProductsData.forEach(p => { 
+                    select.innerHTML += `<option value="${p.name}">${p.name} (${p.price} ₺)</option>`; 
+                });
+                const list = document.getElementById('ingredients-list'); 
+                if(list.children.length === 0) addIngredientRow();
             }
         };
-        window.addIngredientRow = () => { document.getElementById('ingredients-list').insertAdjacentHTML('beforeend', `<div class="grid grid-cols-12 gap-2 mb-2 animate-[fadeIn_0.2s_ease-in]"><div class="col-span-5"><input class="w-full border p-2 rounded text-sm ing-name outline-none focus:border-green-500" placeholder="Malzeme"></div><div class="col-span-3"><input class="w-full border p-2 rounded text-sm ing-qty outline-none focus:border-green-500" placeholder="Miktar"></div><div class="col-span-3"><input type="number" class="w-full border p-2 rounded text-sm ing-price outline-none focus:border-green-500" oninput="calculateTotals()" placeholder="Fiyat"></div><div class="col-span-1 text-center"><button onclick="this.parentElement.parentElement.remove();calculateTotals()" class="text-red-400 hover:text-red-600 transition"><i class="fa-solid fa-trash"></i></button></div></div>`); };
-        window.calculateTotals = () => { let t=0; document.querySelectorAll('.ing-price').forEach(i=>t+=Number(i.value)||0); let m=Number(document.getElementById('profit-margin').value); document.getElementById('total-cost').innerText=t.toFixed(2)+" ₺"; document.getElementById('suggested-price').innerText=(t*(1+m/100)).toFixed(2)+" ₺"; };
+
+        window.addIngredientRow = () => { 
+            const list = document.getElementById('ingredients-list'); 
+            const rowId = Date.now();
+            list.insertAdjacentHTML('beforeend', `
+                <div class="grid grid-cols-12 gap-2 mb-2 animate-[fadeIn_0.2s_ease-in]" id="row-${rowId}">
+                    <div class="col-span-5"><input class="w-full border p-2 rounded text-sm ing-name outline-none focus:border-green-500" placeholder="Malzeme"></div>
+                    <div class="col-span-3"><input class="w-full border p-2 rounded text-sm ing-qty outline-none focus:border-green-500" placeholder="Miktar"></div>
+                    <div class="col-span-3"><input type="number" class="w-full border p-2 rounded text-sm ing-price outline-none focus:border-green-500" oninput="calculateTotals()" placeholder="Fiyat"></div>
+                    <div class="col-span-1 text-center"><button onclick="this.parentElement.parentElement.remove();calculateTotals()" class="text-red-400 hover:text-red-600 transition"><i class="fa-solid fa-trash"></i></button></div>
+                </div>
+            `); 
+        };
+
+        window.calculateTotals = () => { 
+            let totalCost = 0; 
+            document.querySelectorAll('.ing-price').forEach(i => totalCost += Number(i.value) || 0); 
+            let margin = Number(document.getElementById('profit-margin').value); 
+            document.getElementById('total-cost').innerText = totalCost.toFixed(2) + " ₺"; 
+            document.getElementById('suggested-price').innerText = (totalCost * (1 + margin/100)).toFixed(2) + " ₺"; 
+        };
+
         window.saveCalculation = async () => { 
-            const n=document.getElementById('calc-product-select').value; if(!n)return alert("Ürün seçin"); 
-            const rows = document.querySelectorAll('#ingredients-list > div'); let ingredients = [];
-            rows.forEach(row => { const name = row.querySelector('.ing-name').value; const qty = row.querySelector('.ing-qty').value; const price = row.querySelector('.ing-price').value; if(name && price) ingredients.push({ name, qty, price: Number(price) }); });
+            const productName = document.getElementById('calc-product-select').value; 
+            if(!productName) return alert("Ürün seçin"); 
+            
+            const rows = document.querySelectorAll('#ingredients-list > div'); 
+            let ingredients = [];
+            rows.forEach(row => { 
+                const name = row.querySelector('.ing-name').value; 
+                const qty = row.querySelector('.ing-qty').value; 
+                const price = row.querySelector('.ing-price').value; 
+                if(name && price) ingredients.push({ name, qty, price: Number(price) }); 
+            });
+            
             if(ingredients.length === 0) return alert("Malzeme girin");
-            try{ await addDoc(collection(db,"cost_logs"),{productName:n, ingredients, totalCost:document.getElementById('total-cost').innerText, margin:document.getElementById('profit-margin').value, suggestedPrice:document.getElementById('suggested-price').innerText, date:new Date()}); alert("Kaydedildi"); toggleCalculator(); }catch(e){alert("Hata")} 
+            
+            try{ 
+                await addDoc(collection(db, "cost_logs"), {
+                    productName, 
+                    ingredients, 
+                    totalCost: document.getElementById('total-cost').innerText, 
+                    margin: document.getElementById('profit-margin').value, 
+                    suggestedPrice: document.getElementById('suggested-price').innerText, 
+                    date: new Date()
+                }); 
+                showNotification("Başarılı", "Maliyet hesabı kaydedildi."); 
+                toggleCalculator(); 
+            } catch(e) { alert("Hata"); } 
         };
 
         async function loadSettings() { const d = await getDoc(settingsDocRef); if (d.exists()) { document.getElementById('accent-color').value = d.data().accentColor || '#f97316'; document.getElementById('color-preview').style.backgroundColor = d.data().accentColor || '#f97316'; } }
-        window.saveSettings = async () => { const c = document.getElementById('accent-color').value; try { await setDoc(settingsDocRef, { accentColor: c }); alert("Renk kaydedildi"); document.getElementById('color-preview').style.backgroundColor = c; } catch(e){} };
+        window.saveSettings = async () => { const c = document.getElementById('accent-color').value; try { await setDoc(settingsDocRef, { accentColor: c }); showNotification("Ayarlar", "Renk kaydedildi."); document.getElementById('color-preview').style.backgroundColor = c; } catch(e){} };
     </script>
 </body>
 </html>
