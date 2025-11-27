@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elif'le Lezzet | Butik Ev Yemekleri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8f5f2; color: #1e293b; }
+        h1, h2, h3, h4, .serif-font { font-family: 'Playfair Display', serif; }
+        
+        /* Dinamik Renkler */
+        :root { --primary: #c2410c; }
+        .text-primary { color: var(--primary) !important; }
+        .bg-primary { background-color: var(--primary) !important; }
+        .border-primary { border-color: var(--primary) !important; }
+
+        /* Nav & Butonlar */
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .cat-btn.active { background-color: #1e293b; color: white; border-color: #1e293b; }
+        
+        /* Yıldızlar */
+        .star-rating i { cursor: pointer; transition: color 0.2s; }
+        .star-rating i.active { color: #f59e0b; } 
+        .star-rating i.inactive { color: #cbd5e1; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <nav class="glass-nav fixed w-full top-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 group cursor-pointer">
+                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <div class="leading-tight">
+                    <h1 class="text-xl font-bold tracking-tight text-slate-800">Elif'le<span class="text-primary">Lezzet</span></h1>
+                    <span class="text-[10px] uppercase tracking-widest text-slate-500 font-semibold">Gourmet Homemade</span>
+                </div>
+            </a>
+            
+            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+                <a href="#about" class="hover:text-primary transition">Hakkımızda</a>
+                <a href="#reviews" class="hover:text-primary transition">Yorumlar</a>
+                <a href="#menu" class="hover:text-primary transition">Menü</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="#ozel-siparis" class="hidden md:flex items-center text-sm font-semibold text-slate-600 hover:text-primary transition gap-2">
+                    <i class="fa-solid fa-star text-yellow-500"></i> Özel Sipariş
+                </a>
+                <button onclick="toggleCart()" class="relative group">
+                    <div class="p-3 bg-slate-100 rounded-full group-hover:bg-primary transition duration-300">
+                        <i class="fa-solid fa-basket-shopping text-xl text-slate-700 group-hover:text-white transition"></i>
+                    </div>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm border-2 border-white hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-orange-100 text-primary text-xs font-bold tracking-widest uppercase mb-4">Ev Yapımı & Doğal</span>
+            <h2 class="text-5xl md:text-7xl font-bold text-slate-900 mb-6 leading-tight serif-font">
+                Anne Eli Değmiş Gibi...
+            </h2>
+            <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                En taze malzemelerle, katkısız ve sevgiyle hazırladığımız lezzetleri mutfağımızdan kapınıza getiriyoruz.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#menu" class="bg-primary text-white font-semibold py-4 px-10 rounded-full shadow-lg hover:opacity-90 transition">Lezzetleri Keşfet</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2">
+                    <img src="https://static.lineadecor.com/public/uploads/product-80-66e80cab6ceeb.webp" class="rounded-2xl shadow-2xl w-full object-cover h-[400px]">
+                </div>
+                <div class="md:w-1/2 space-y-6">
+                    <h3 class="text-3xl font-bold serif-font text-slate-800">Hikayemiz & Tutkumuz</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Elif'le Lezzet, küçük bir ev mutfağında başlayan lezzet yolculuğudur. Amacımız, "hakiki ev tadını" sofralarınıza getirmek. Kullandığımız her malzeme pazardan bizzat seçilir, katkı maddesi içermez.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="container mx-auto px-6 py-16">
+        <div class="text-center mb-12">
+            <h3 class="text-3xl md:text-4xl font-bold text-slate-800 mb-3 serif-font">Menümüz</h3>
+            <div class="w-20 h-1 bg-primary mx-auto rounded-full opacity-50"></div>
+        </div>
+        
+        <div id="category-container" class="flex justify-center gap-2 mb-12 flex-wrap min-h-[50px]"></div>
+
+        <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div class="col-span-full text-center py-20">
+                <i class="fa-solid fa-circle-notch fa-spin text-4xl text-slate-300"></i>
+                <p class="mt-4 text-slate-400">Menü yükleniyor...</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-16 bg-orange-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-slate-800 serif-font">Müşteri Yorumları</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="bg-white p-8 rounded-2xl shadow-lg h-fit">
+                    <h4 class="text-xl font-bold mb-4 border-b pb-2">Deneyiminizi Paylaşın</h4>
+                    <form onsubmit="submitReview(event)" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" id="rev-name" placeholder="Adınız" class="w-full border p-3 rounded-lg bg-slate-50 outline-none focus:border-primary" required>
+                            <input type="text" id="rev-surname" placeholder="Soyadınız" class="w-full border p-3 rounded-lg bg-slate-50 outline-none focus:border-primary" required>
+                        </div>
+                        <p class="text-[10px] text-slate-400"><i class="fa-solid fa-lock"></i> Soyadınız gizli yayınlanacaktır (Örn: Yılmaz -> Y***).</p>
+                        
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-bold text-slate-600">Puanınız:</span>
+                            <div class="star-rating text-2xl flex" id="star-container">
+                                <i class="fa-solid fa-star inactive" onclick="setRating(1)"></i>
+                                <i class="fa-solid fa-star inactive" onclick="setRating(2)"></i>
+                                <i class="fa-solid fa-star inactive" onclick="setRating(3)"></i>
+                                <i class="fa-solid fa-star inactive" onclick="setRating(4)"></i>
+                                <i class="fa-solid fa-star inactive" onclick="setRating(5)"></i>
+                            </div>
+                            <input type="hidden" id="rev-rating" value="0">
+                        </div>
+
+                        <textarea id="rev-msg" rows="3" placeholder="Yorumunuz..." class="w-full border p-3 rounded-lg bg-slate-50 outline-none focus:border-primary" required></textarea>
+                        <button type="submit" class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold hover:bg-primary transition">Yorumu Gönder</button>
+                    </form>
+                </div>
+
+                <div class="space-y-4 max-h-[500px] overflow-y-auto pr-2" id="reviews-list">
+                    <div class="text-center text-slate-400 py-10">Yorumlar yükleniyor...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ozel-siparis" class="py-20 bg-slate-900 text-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/2 space-y-6">
+                    <span class="text-orange-400 font-bold tracking-widest text-sm uppercase">Size Özel Hizmet</span>
+                    <h3 class="text-4xl md:text-5xl font-bold serif-font">Hayalinizdeki Sofrayı <br>Birlikte Kuralım.</h3>
+                    <p class="text-slate-300 text-lg font-light">Menüde olmayan bir lezzet mi arıyorsunuz? Doğum günü pastaları veya davetler için bize yazın.</p>
+                </div>
+                <div class="lg:w-1/2 w-full">
+                    <form onsubmit="sendCustomOrder(event)" class="bg-white text-slate-800 p-8 rounded-2xl shadow-2xl space-y-5">
+                        <h4 class="text-xl font-bold border-b pb-4 mb-2">Özel İstek Formu</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase">Ad Soyad</label>
+                                <input type="text" id="cust-name" class="w-full border-b-2 border-slate-200 py-2 outline-none focus:border-primary" required>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase flex justify-between">
+                                    <span>Tarih</span>
+                                    <span class="text-[9px] text-orange-600 bg-orange-50 px-1.5 rounded">En erken yarın</span>
+                                </label>
+                                <input type="date" id="cust-date" class="w-full border-b-2 border-slate-200 py-2 outline-none text-slate-600 focus:border-primary" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase">İsteğiniz</label>
+                            <textarea id="cust-desc" rows="3" placeholder="Örn: 20 kişilik zeytinyağlı sarma..." class="w-full border-b-2 border-slate-200 py-2 outline-none resize-none focus:border-primary" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition flex justify-center items-center gap-2 mt-4">
+                            WhatsApp ile Gönder <i class="fa-brands fa-whatsapp text-xl"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-white border-t border-slate-100 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-slate-400 text-sm">© 2024 Elif'le Lezzet. Sevgiyle pişirildi.</p>
+        </div>
+    </footer>
+
+    <div id="cart-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex justify-end transition-opacity duration-300">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col transform transition-transform translate-x-full duration-300" id="cart-panel">
+            <div class="p-6 border-b flex justify-between items-center bg-slate-50">
+                <h3 class="text-xl font-bold text-slate-800 serif-font">Sipariş Sepeti</h3>
+                <button onclick="toggleCart()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+            
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+
+            <div class="p-6 border-t bg-slate-50 space-y-4">
+                <div class="bg-white p-3 rounded-xl border border-slate-200">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1 flex justify-between">
+                        <span><i class="fa-regular fa-calendar-days text-primary"></i> Teslimat Tarihi</span>
+                        <span class="text-[10px] text-orange-600 bg-orange-50 px-2 rounded-full">En erken yarın</span>
+                    </label>
+                    <input type="date" id="cart-date" class="w-full outline-none text-slate-700 font-medium bg-transparent cursor-pointer">
+                </div>
+
+                <div class="flex justify-between items-center text-xl font-bold text-slate-800">
+                    <span>Toplam Tutar</span>
+                    <span id="cart-total" class="text-primary">0 ₺</span>
+                </div>
+                
+                <button onclick="sendToWhatsApp()" class="w-full bg-green-600 text-white font-bold py-4 rounded-xl hover:bg-green-700 transition flex items-center justify-center gap-3 shadow-lg shadow-green-200">
+                    <span>Siparişi Onayla</span> <i class="fa-brands fa-whatsapp text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // CONFIG BURAYA
+        const firebaseConfig = {
+            apiKey: "AIzaSyCE749Ey9zhATV5LBEbZzkgTN76oTKZ46A",
+            authDomain: "elifle-lezzet.firebaseapp.com",
+            projectId: "elifle-lezzet",
+            storageBucket: "elifle-lezzet.firebasestorage.app",
+            messagingSenderId: "470005399778",
+            appId: "1:470005399778:web:1a724255739d57eb509ebb",
+            measurementId: "G-5JK1Z0YHX3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const settingsDocRef = doc(db, "settings", "siteConfig");
+
+        // Global Değişkenler
+        window.allProducts = []; 
+        window.cart = JSON.parse(localStorage.getItem('elifCart')) || [];
+
+        // Kategori Haritası (Türkçe İsimler)
+        const categoryLabels = {
+            yemek: "Ana Yemekler",
+            tatli: "Tatlılar",
+            tuzlu: "Tuzlular",
+            kahvalti: "Kahvaltılık & Sos",
+            meze: "Mezeler & Salatalar",
+            icecek: "İçecekler",
+            diyet: "Diyet / Fit",
+            ozel: "Özel Sipariş"
+        };
+
+        // --- VERİ ÇEKME (ÜRÜNLER) ---
+        async function fetchProducts() {
+            const listDiv = document.getElementById('product-list');
+            try {
+                // Renk Ayarı
+                const docSnap = await getDoc(settingsDocRef);
+                if (docSnap.exists() && docSnap.data().accentColor) {
+                    document.documentElement.style.setProperty('--primary', docSnap.data().accentColor);
+                }
+
+                const querySnapshot = await getDocs(collection(db, "products"));
+                window.allProducts = [];
+                querySnapshot.forEach((doc) => {
+                    window.allProducts.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Mevcut Kategorileri Bul
+                const existingCategories = [...new Set(window.allProducts.map(p => p.category))];
+                renderCategoryButtons(existingCategories);
+                window.renderProducts('all');
+
+            } catch (error) {
+                console.error(error);
+                listDiv.innerHTML = '<div class="col-span-full text-center py-10 text-red-400">Veriler yüklenirken hata oluştu.</div>';
+            }
+        }
+
+        // --- KATEGORİ BUTONLARI ---
+        function renderCategoryButtons(activeCats) {
+            const container = document.getElementById('category-container');
+            let html = `<button onclick="window.filterProducts('all', this)" class="cat-btn active px-6 py-2.5 rounded-full font-semibold border border-transparent shadow-sm transition text-sm">Tümü</button>`;
+            
+            Object.keys(categoryLabels).forEach(key => {
+                if (activeCats.includes(key)) {
+                    html += `<button onclick="window.filterProducts('${key}', this)" class="cat-btn px-6 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-full font-medium hover:border-slate-400 transition text-sm">${categoryLabels[key]}</button>`;
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        // --- ÜRÜN LİSTELEME ---
+        window.renderProducts = function(filter) {
+            const list = document.getElementById('product-list');
+            list.innerHTML = '';
+            
+            const filtered = filter === 'all' ? window.allProducts : window.allProducts.filter(p => p.category === filter);
+
+            if (filtered.length === 0) {
+                list.innerHTML = `<div class="col-span-full text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200"><i class="fa-solid fa-cookie-bite text-4xl text-slate-300 mb-3"></i><p class="text-slate-500">Bu kategoride henüz ürün yok.</p></div>`;
+                return;
+            }
+
+            filtered.forEach(product => {
+                const unitLabel = product.portion ? ` / ${product.portion}` : '';
+                list.innerHTML += `
+                    <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition duration-300 border border-slate-100 flex flex-col overflow-hidden group">
+                        <div class="relative h-56 overflow-hidden">
+                            <img src="${product.img}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide text-slate-700 shadow-sm">
+                                ${categoryLabels[product.category] || 'Lezzet'}
+                            </div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-lg font-bold text-slate-800 serif-font leading-tight">${product.name}</h4>
+                                <span class="font-bold text-primary whitespace-nowrap">${product.price} ₺</span>
+                            </div>
+                            <p class="text-slate-500 text-sm mb-4 line-clamp-2 font-light">${product.desc}</p>
+                            
+                            <div class="mt-auto space-y-3">
+                                <div class="flex items-center gap-2 text-xs text-slate-400">
+                                    <i class="fa-solid fa-scale-balanced"></i> ${product.portion}
+                                </div>
+                                <div class="relative">
+                                    <input type="text" id="note-${product.id}" placeholder="Özel notunuz? (İsteğe bağlı)" class="w-full text-xs border-b border-slate-200 py-2 focus:border-primary outline-none bg-transparent transition mb-3">
+                                </div>
+                                <button onclick="window.addToCart('${product.id}')" class="w-full bg-slate-900 text-white py-3 rounded-xl hover:bg-primary transition flex justify-center items-center gap-2 text-sm font-bold shadow-lg shadow-slate-200 group-hover:shadow-orange-200">
+                                    <i class="fa-solid fa-plus"></i> Sepete Ekle
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        window.filterProducts = function(cat, btnElement) {
+            window.renderProducts(cat);
+            if(btnElement) {
+                document.querySelectorAll('.cat-btn').forEach(b => {
+                    b.className = 'cat-btn px-6 py-2.5 bg-white text-slate-600 border border-slate-200 rounded-full font-medium hover:border-slate-400 transition text-sm';
+                });
+                btnElement.className = 'cat-btn active px-6 py-2.5 bg-slate-800 text-white border border-slate-800 rounded-full font-semibold shadow-md transition text-sm';
+            }
+        };
+
+        // --- YORUM SİSTEMİ ---
+        window.setRating = (n) => {
+            document.getElementById('rev-rating').value = n;
+            const stars = document.querySelectorAll('#star-container i');
+            stars.forEach((star, index) => {
+                if(index < n) { star.classList.remove('inactive'); star.classList.add('active'); }
+                else { star.classList.remove('active'); star.classList.add('inactive'); }
+            });
+        };
+
+        window.submitReview = async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "Gönderiliyor..."; btn.disabled = true;
+
+            const name = document.getElementById('rev-name').value;
+            const surname = document.getElementById('rev-surname').value;
+            const msg = document.getElementById('rev-msg').value;
+            const rating = Number(document.getElementById('rev-rating').value);
+
+            if(rating === 0) { alert("Lütfen puan veriniz."); btn.innerText = originalText; btn.disabled = false; return; }
+
+            try {
+                await addDoc(collection(db, "reviews"), {
+                    name: name,
+                    surname: surname,
+                    comment: msg,
+                    rating: rating,
+                    date: new Date()
+                });
+                alert("Yorumunuz için teşekkürler!");
+                e.target.reset();
+                window.setRating(0);
+                fetchReviews();
+            } catch (err) { console.error(err); alert("Hata oluştu."); }
+            finally { btn.innerText = originalText; btn.disabled = false; }
+        };
+
+        async function fetchReviews() {
+            const list = document.getElementById('reviews-list');
+            try {
+                const q = query(collection(db, "reviews"), orderBy("date", "desc"), limit(10));
+                const querySnapshot = await getDocs(q);
+                
+                if(querySnapshot.empty) { list.innerHTML = '<div class="text-center text-slate-400">Henüz yorum yapılmamış.</div>'; return; }
+
+                list.innerHTML = '';
+                querySnapshot.forEach(doc => {
+                    const d = doc.data();
+                    const maskedSurname = d.surname ? d.surname.charAt(0).toUpperCase() + "***" : "";
+                    
+                    let starsHtml = '';
+                    for(let i=0; i<5; i++) {
+                        starsHtml += `<i class="fa-solid fa-star text-xs ${i < d.rating ? 'text-yellow-400' : 'text-gray-200'}"></i>`;
+                    }
+
+                    // YANIT HTML
+                    const replyHtml = d.reply ? `
+                        <div class="mt-3 bg-orange-50 border-l-4 border-primary p-3 rounded-r-lg">
+                            <div class="flex items-center gap-2 mb-1">
+                                <div class="w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-[10px]"><i class="fa-solid fa-utensils"></i></div>
+                                <span class="text-xs font-bold text-slate-700">Elif'le Lezzet</span>
+                            </div>
+                            <p class="text-xs text-slate-600 italic">"${d.reply}"</p>
+                        </div>
+                    ` : '';
+
+                    list.innerHTML += `
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs">${d.name.charAt(0)}${maskedSurname.charAt(0)}</div>
+                                    <div>
+                                        <h5 class="font-bold text-sm text-slate-800">${d.name} ${maskedSurname}</h5>
+                                        <div class="flex">${starsHtml}</div>
+                                    </div>
+                                </div>
+                                <span class="text-[10px] text-slate-400">${d.date?.toDate().toLocaleDateString('tr-TR')}</span>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed">"${d.comment}"</p>
+                            ${replyHtml}
+                        </div>
+                    `;
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        // --- SEPET VE SİPARİŞ ---
+        window.addToCart = function(id) {
+            const product = window.allProducts.find(p => p.id === id);
+            const noteInput = document.getElementById(`note-${id}`);
+            const note = noteInput ? noteInput.value.trim() : "";
+            const existingItem = window.cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.qty++;
+                if(note) existingItem.note = existingItem.note ? existingItem.note + ", " + note : note;
+            } else {
+                window.cart.push({ ...product, qty: 1, note: note });
+            }
+            if(noteInput) noteInput.value = "";
+            window.saveCart(); 
+            window.renderCart();
+            
+            // Buton animasyonu
+            const btn = document.querySelector(`button[onclick="window.addToCart('${id}')"]`);
+            if(btn) {
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Eklendi';
+                btn.classList.add('bg-green-600');
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove('bg-green-600');
+                }, 1000);
+            }
+        };
+
+        window.renderCart = function() {
+            const div = document.getElementById('cart-items');
+            const totalSpan = document.getElementById('cart-total');
+            
+            if (window.cart.length === 0) { 
+                div.innerHTML = '<div class="text-center py-10 opacity-50"><i class="fa-solid fa-basket-shopping text-5xl mb-3"></i><p>Sepetiniz şu an boş.</p></div>'; 
+                totalSpan.innerText = '0 ₺'; return; 
+            }
+
+            let total = 0; div.innerHTML = '';
+            window.cart.forEach(item => {
+                total += item.price * item.qty;
+                const unitLabel = item.portion ? ` / ${item.portion}` : '';
+                const noteHtml = item.note ? `<div class="text-xs text-orange-600 mt-1 bg-orange-50 p-1 rounded italic"><i class="fa-solid fa-pen-nib mr-1"></i>${item.note}</div>` : '';
+
+                div.innerHTML += `
+                    <div class="flex flex-col bg-white p-3 rounded-xl border border-slate-100 shadow-sm relative group">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <img src="${item.img}" class="w-14 h-14 rounded-lg object-cover">
+                                <div>
+                                    <h5 class="font-bold text-sm text-slate-800 serif-font">${item.name}</h5>
+                                    <div class="text-xs text-slate-500">${item.price} ₺${unitLabel}</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 bg-slate-50 rounded-lg p-1">
+                                <button onclick="window.updateQty('${item.id}', -1)" class="w-6 h-6 flex items-center justify-center bg-white rounded shadow-sm text-slate-600 hover:text-red-500">-</button>
+                                <span class="font-bold text-sm text-slate-800 w-4 text-center">${item.qty}</span>
+                                <button onclick="window.updateQty('${item.id}', 1)" class="w-6 h-6 flex items-center justify-center bg-white rounded shadow-sm text-slate-600 hover:text-green-500">+</button>
+                            </div>
+                        </div>
+                        ${noteHtml}
+                    </div>`;
+            });
+            totalSpan.innerText = total + ' ₺';
+        };
+
+        window.sendToWhatsApp = function() {
+            if (window.cart.length === 0) return alert("Sepetiniz boş!");
+            const dateInput = document.getElementById('cart-date').value;
+            if(!dateInput) return alert("Lütfen teslimat tarihi seçiniz!");
+
+            // Tarih Formatı
+            const dateObj = new Date(dateInput);
+            const formattedDate = dateObj.toLocaleDateString('tr-TR');
+
+            let message = "👋 *Merhaba Elif'le Lezzet!* \n";
+            message += "Web siteniz üzerinden yeni bir sipariş oluşturdum.\n\n";
+            message += `🗓 *Teslimat Tarihi:* ${formattedDate}\n`;
+            message += "-----------------------------------\n";
+            message += "🛒 *SİPARİŞ LİSTESİ*\n";
+            message += "-----------------------------------\n";
+
+            let total = 0;
+            window.cart.forEach(i => { 
+                total += i.price * i.qty; 
+                message += `▪️ *${i.name}*\n   └ ${i.qty} x ${i.price}₺ = *${i.price * i.qty} ₺*\n`;
+                if(i.note) message += `      ✏️ _Not: ${i.note}_\n`;
+            });
+            
+            message += "-----------------------------------\n";
+            message += `💰 *TOPLAM TUTAR: ${total} ₺*\n`;
+            message += "-----------------------------------\n\n";
+            message += "📍 *Teslimat adresi ve ödeme bilgileri için yardımcı olabilir misiniz?*";
+            
+            const phoneNumber = "905555555555"; // TELEFON NUMARANIZI BURAYA YAZIN
+            window.location.href = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+        };
+        
+        window.sendCustomOrder = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('cust-name').value;
+            const date = document.getElementById('cust-date').value;
+            const desc = document.getElementById('cust-desc').value;
+            const phoneNumber = "905555555555"; // TELEFON NUMARANIZI BURAYA YAZIN
+
+            const formattedDate = new Date(date).toLocaleDateString('tr-TR');
+
+            let message = "✨ *ÖZEL SİPARİŞ TALEBİ* ✨\n\n";
+            message += `👤 *Müşteri:* ${name}\n`;
+            message += `📅 *İstenen Tarih:* ${formattedDate}\n`;
+            message += "-----------------------------------\n";
+            message += "📝 *İstek Detayı:*\n";
+            message += `${desc}\n`;
+            message += "-----------------------------------\n\n";
+            message += "Fiyat ve detayları konuşabilir miyiz?";
+
+            window.location.href = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+        };
+
+        window.updateQty = function(id, c) { const i = window.cart.find(x => x.id === id); if(!i) return; i.qty += c; if(i.qty <= 0) window.cart = window.cart.filter(x => x.id !== id); window.saveCart(); window.renderCart(); };
+        window.saveCart = function() { localStorage.setItem('elifCart', JSON.stringify(window.cart)); window.updateCartCount(); };
+        window.updateCartCount = function() { const c = window.cart.reduce((a, b) => a + b.qty, 0); const b = document.getElementById('cart-count'); b.innerText = c; b.classList.toggle('hidden', c === 0); };
+        
+        // Tarih Kısıtlaması ve Modal
+        window.toggleCart = function() { 
+            const m = document.getElementById('cart-modal'), p = document.getElementById('cart-panel'); 
+            if (m.classList.contains('hidden')) { 
+                // Yarının tarihi
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                document.getElementById('cart-date').min = tomorrow.toISOString().split('T')[0];
+                m.classList.remove('hidden'); 
+                setTimeout(() => p.classList.remove('translate-x-full'), 10); 
+            } else { 
+                p.classList.add('translate-x-full'); 
+                setTimeout(() => m.classList.add('hidden'), 300); 
+            } 
+        };
+        
+        // Sayfa Yüklendiğinde Tarih Ayarı
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const minDateStr = tomorrow.toISOString().split('T')[0];
+        document.getElementById('cart-date').min = minDateStr;
+        document.getElementById('cust-date').min = minDateStr;
+
+        // Başlat
+        fetchProducts(); 
+        fetchReviews();
+        window.updateCartCount(); 
+        window.renderCart();
+    </script>
+</body>
+</html>
